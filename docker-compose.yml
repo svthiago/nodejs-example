@@ -1,0 +1,31 @@
+# Use postgres/example user/password credentials
+version: '3.9'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: example
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+
+  app:
+    build: ./app
+    command: nodemon index.js
+    restart: on-failure
+    volumes:
+      - ./app:/app:rw
+    ports:
+      - "5000:5000"
+
+networks:
+  default:
+    driver: bridge
